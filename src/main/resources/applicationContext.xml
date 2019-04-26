@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	<!-- 组件扫描 -->
+	<context:component-scan
+		base-package="com.action,com.repository,com.dao.Impl,com.service.Impl"></context:component-scan>
+
+	<!-- 配置数据源 -->
+	<context:property-placeholder
+		location="classpath:jdbc.properties" />
+	<bean id="pooledDataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<!-- 配置连接池属性 -->
+		<property name="jdbcUrl" value="${jdbc.jdbcUrl}" />
+		<property name="driverClass" value="${jdbc.driverClass}" />
+		<property name="user" value="${jdbc.user}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<!-- 注入datasource，给sessionfactoryBean内setdatasource提供数据源 -->
+		<property name="dataSource" ref="pooledDataSource" />
+		<property name="configLocation"
+			value="classpath:hibernate.cfg.xml"></property>
+		<!-- //加载实体类的映射文件位置及名称 -->
+		<!-- <property name="mappingLocations" value="com.bean.*.hbm.xml"></property> -->
+		<!-- 用注解的方式 -->
+		<property name="packagesToScan" value="com.bean"></property>
+	</bean>
+	<!-- 配置Spring声明式事务 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<!-- 开启基于注解的事物 -->
+	<aop:config>
+		<!-- 切入点表达式 -->
+		<aop:pointcut
+			expression="execution(* com.service..*(..))" id="txPoint" />
+		<!-- 配置事物增强 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint" />
+	</aop:config>
+	<!-- 配置事物增强，事物如何切入 -->
+	<tx:advice id="txAdvice"
+		transaction-manager="transactionManager">
+		<tx:attributes>
+			<!-- 所有方法都是事物方法 -->
+			<tx:method name="*" />
+			<!-- 以get开头的多有方法 -->
+			<tx:method name="get*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- 开启使用注解管理hibernate -->
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+
+	<aop:config proxy-target-class="true"></aop:config>
+
+	<!-- <bean id="viewResolver" -->
+	<!-- class="org.thymeleaf.spring4.view.ThymeleafViewResolver"> -->
+	<!-- <property name="templateEngine" ref="templateEngine"></property> -->
+	<!-- </bean> -->
+
+	<!-- <bean id="servletContext" class="org.thymeleaf"></bean> -->
+
+	<!-- <bean id="templateEngine" -->
+	<!-- class="org.thymeleaf.spring4.SpringTemplateEngine"></bean> -->
+
+	<!-- 视图解析器 -->
+	<!-- <bean id="templateResolver" -->
+	<!-- class="org.thymeleaf.templateresolver.ServletContextTemplateResolver"> -->
+	<!-- <constructor-arg name="servletContext" ref="aaa"></constructor-arg> -->
+	<!-- <property name="prefix" value="/WEB-INF/templates"></property> -->
+	<!-- <property name="suffix" value=".html"></property> -->
+	<!-- </bean> -->
+</beans>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation"
+		value="true" />
+	<package name="default" namespace="/"
+		extends="json-default,struts-default">
+		<interceptors>
+			<interceptor name="loginInterceptor"
+				class="com.interceptor.SimpleInterceptor">
+			</interceptor>
+		</interceptors>
+<!-- 		<default-action-ref name="login"></default-action-ref> -->
+		<action name="*">
+			<result>/views/login.jsp</result>
+		</action>
+		<action name="loginPro" class="homeAction">
+			<result name="ERROR">/views/login.jsp</result>
+			<result name="SUCCESS">/views/main.jsp</result>
+			<interceptor-ref name="defaultStack"/>
+			<interceptor-ref name="loginInterceptor"></interceptor-ref>
+		</action>
+		<!-- student模块 -->
+		<action name="studentinfoupdate"
+			class="studentInfoUpdateAction">
+			<result type="json" name="SUCCESS">
+				<param name="root"></param>
+			</result>
+		</action>
+		<action name="studentinfoadd" class="studentInfoAddAction">
+			<result type="json" name="SUCCESS">
+				<param name="root"></param>
+			</result>
+		</action>
+		<action name="studentinfodel" class="studentInfoDeleteAction">
+			<result type="json" name="SUCCESS">
+				<param name="root">msg</param>
+			</result>
+		</action>
+		<action name="studentsinfo" class="studentInfoAction">
+			<result type="json" name="SUCCESS">
+				<param name="root">map</param>
+			</result>
+		</action>
+		<!-- sc模块 -->
+		<action name="scinfoupdate"
+			class="selectCourseInfoUpdateAction">
+			<result type="json" name="SUCCESS">
+				<param name="root"></param>
+			</result>
+		</action>
+		<action name="scinfoadd" class="selectCourseInfoAddAction">
+			<result type="json" name="SUCCESS">
+				<param name="root"></param>
+			</result>
+		</action>
+		<action name="scinfodel" class="selectCourseInfoDeleteAction">
+			<result type="json" name="SUCCESS">
+				<param name="root">msg</param>
+			</result>
+		</action>
+		<action name="scinfo" class="selectCourseInfoAction">
+			<result type="json" name="SUCCESS">
+				<param name="root">map</param>
+			</result>
+		</action>
+		<!-- score模块 -->
+		<action name="scoreinfoupdate"
+			class="scoreInfoUpdateAction">
+			<result type="json" name="SUCCESS">
+				<param name="root"></param>
+			</result>
+		</action>
+		<action name="scoreinfoadd" class="scoreInfoAddAction">
+			<result type="json" name="SUCCESS">
+				<param name="root"></param>
+			</result>
+		</action>
+		<action name="scoreinfodel" class="scoreInfoDeleteAction">
+			<result type="json" name="SUCCESS">
+				<param name="root">msg</param>
+			</result>
+		</action>
+		<action name="scoreinfo" class="scoreInfoAction">
+			<result type="json" name="SUCCESS">
+				<param name="root">map</param>
+			</result>
+		</action>
+		<!-- reward模块 -->
+		<action name="rewardinfoupdate"
+			class="rewardInfoUpdateAction">
+			<result type="json" name="SUCCESS">
+				<param name="root"></param>
+			</result>
+		</action>
+		<action name="rewardinfoadd" class="rewardInfoAddAction">
+			<result type="json" name="SUCCESS">
+				<param name="root"></param>
+			</result>
+		</action>
+		<action name="rewardinfodel" class="rewardInfoDeleteAction">
+			<result type="json" name="SUCCESS">
+				<param name="root">msg</param>
+			</result>
+		</action>
+		<action name="rewardinfo" class="rewardInfoAction">
+			<result type="json" name="SUCCESS">
+				<param name="root">map</param>
+			</result>
+		</action>
+		<!-- punishment模块 -->
+		<action name="punishmentinfoupdate"
+			class="punishmentInfoUpdateAction">
+			<result type="json" name="SUCCESS">
+				<param name="root"></param>
+			</result>
+		</action>
+		<action name="punishmentinfoadd" class="punishmentInfoAddAction">
+			<result type="json" name="SUCCESS">
+				<param name="root"></param>
+			</result>
+		</action>
+		<action name="punishmentinfodel" class="punishmentInfoDeleteAction">
+			<result type="json" name="SUCCESS">
+				<param name="root">msg</param>
+			</result>
+		</action>
+		<action name="punishmentinfo" class="punishmentInfoAction">
+			<result type="json" name="SUCCESS">
+				<param name="root">map</param>
+			</result>
+		</action>
+		<!-- activity模块 -->
+		<action name="activityinfoupdate"
+			class="activityInfoUpdateAction">
+			<result type="json" name="SUCCESS">
+				<param name="root"></param>
+			</result>
+		</action>
+		<action name="activityinfoadd" class="activityInfoAddAction">
+			<result type="json" name="SUCCESS">
+				<param name="root"></param>
+			</result>
+		</action>
+		<action name="activityinfodel" class="activityInfoDeleteAction">
+			<result type="json" name="SUCCESS">
+				<param name="root">msg</param>
+			</result>
+		</action>
+		<action name="activityinfo" class="activityInfoAction">
+			<result type="json" name="SUCCESS">
+				<param name="root">map</param>
+			</result>
+		</action>
+	</package>
+	<!-- 过滤静态文件 -->
+	<constant name="struts.action.excludePattern"
+		value="/static/.*"></constant>
+</struts>
